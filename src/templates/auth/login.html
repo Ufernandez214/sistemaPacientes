@@ -1,0 +1,48 @@
+{% extends './base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block customCSS %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% endblock %}
+
+{% block body %}
+<section class="material-half-bg">
+    <div class="cover"></div>
+  </section>
+  <section class="login-content">
+    <div class="logo">
+      <h1>Sistema de Atención Pacientes</h1>
+    </div>
+    {% with messages = get_flashed_messages() %}
+
+    {% if messages %}
+    <br />
+    {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% endwith %}
+    <div class="login-box">
+      <form class="login-form" action="/login" method="POST">
+        <h3 class="login-head"><i class="fa fa-lg fa-fw fa-user"></i>INICIAR SESIÓN</h3>
+        <div class="form-group">
+          <label class="control-label">USUARIO</label>
+          <input id="username" name="username" class="form-control" type="text" placeholder="Email" autofocus>
+        </div>
+        <div class="form-group">
+          <label class="control-label">CONTRASEÑA</label>
+          <input id="password" name="password" class="form-control" type="password" placeholder="Contraseña">
+        </div>
+        <div id="alertLogin" class="text-center"></div>
+        <div class="form-group btn-container">
+          <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN</button>
+        </div>
+      </form>
+    </div>
+  </section>
+  {% endblock %}

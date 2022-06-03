@@ -1,0 +1,173 @@
+{% extends './estructura.html' %}
+{% block body %}
+  <main class="app-content">    
+      <div class="app-title">
+        <div>
+            <h1><i class="fas fa-user-tag"></i>Pacientes
+                <button class="btn btn-primary" type="button" onclick="openModalNuevoPaciente()" ><i class="fas fa-plus-circle"></i> Nuevo Paciente</button>
+            </h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+          <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+          <li class="breadcrumb-item"><a href="{{ url_for('pacientes') }}">Pacientes</a></li>
+        </ul>
+      </div>
+        <div class="row">
+            <div class="col-md-12">
+              <div class="tile">
+                <div class="tile-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="tablePacientes">
+                      <thead>
+                        <tr>
+                          <th>ID Paciente</th>
+                          <th>Nombres</th>
+                          <th>Apellidos</th>
+                          <th>Correo</th>
+                          <th>Telefono</th>
+                          <th>Nro° Historia Clínica</th>
+                          <th>Controles</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </main>
+
+
+ <!-- Modal -->
+<div class="modal fade form-modal" id="modalFormPaciente" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg" >
+    <div class="modal-content">
+      <div class="modal-header headerRegister">
+        <h5 class="modal-title" id="titleModal">Nuevo Usuario</h5>
+        <button type="button" class="close cerrarModal" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <form id="formularioNuevoPaciente" name="formularioNuevoPaciente" class="form-horizontal">
+              <input type="hidden" id="idUsuario" name="idUsuario" value="">
+              <p class="text-primary">Todos los campos son obligatorios.</p>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="idHistoriaClinica">Id Historia Clínica</label>
+                  <input type="number" class="form-control" id="idHistoriaClinica" name="idHistoriaClinica" required="">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="nombrePaciente">Nombres</label>
+                  <input type="text" class="form-control" id="nombrePaciente" name="nombrePaciente" required="">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="apellidoPaciente">Apellidos</label>
+                  <input type="text" class="form-control" id="apellidoPaciente" name="apellidoPaciente" required="">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="telefonoPaciente">Teléfono</label>
+                  <input type="text" class="form-control" id="telefonoPaciente" name="telefonoPaciente" required="" >
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="emailPaciente">Email</label>
+                  <input type="email" class="form-control" id="emailPaciente" name="emailPaciente" required="">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="edadPaciente">Edad</label>
+                  <input type="number"  min="0" class="form-control" id="edadPaciente" name="edadPaciente" required="">
+              </div>
+                <div class="form-group col-md-6">
+                    <label for="listPacienteid">Tipo Paciente</label>
+                    <select class="form-control" data-live-search="true" id="listPacienteid" name="listPacienteid" onchange="changePaciente()" required >
+                        <option value="1">Niño</option>
+                        <option value="2">Joven/Adulto</option>
+                        <option value="3">3° Edad</option>
+                    </select>
+                </div>
+             </div>
+
+             <div class="form-row child-class">
+              <div class="form-group col-md-6">
+                <label for="pesoPaciente">Peso</label>
+                <input type="number" class="form-control" id="pesoPaciente" name="pesoPaciente" >
+              </div>
+              <div class="form-group col-md-6">
+                <label for="estaturaPaciente">Estatura</label>
+                <input type="number" class="form-control" id="estaturaPaciente" name="estaturaPaciente" >
+              </div>
+            </div>
+
+             <div class="form-row fumador-class" style=" display: none;">
+              <div class="form-group col-md-6">
+                <label for='nombre_producto'>¿Es Fumador?</label>
+                <div class='col-md-8 margin_top'>
+                  <div class="form-check">
+                  <input  onclick="desbloquearFumador(event)" class="form-check-input" type="radio" name="exampleRadios" id="radioNoEsInsumo" value="NO" checked>
+                  <label class="form-check-label" for="radioNoEsInsumo">
+                      No
+                  </label>
+                  
+                  </div>
+                  <div class="form-check">
+                  <input onclick="desbloquearFumador(event)" class="form-check-input" type="radio" name="exampleRadios" id="radioEsInsumo" value="SI">
+                  <label class="form-check-label" for="radioEsInsumo">
+                      Si
+                  </label>
+                  </div>
+              </div>
+              </div>
+              <div class="form-group col-md-6">
+                  <label for="tiempoFumador">¿Tiempo de fumador?</label>
+                  <input type="number"   min="0" class="form-control tiempoFumador" id="tiempoFumador" name="tiempoFumador" disabled  placeholder="Ingrese años">
+              </div>
+           </div>
+           <div class="form-row dieta-class" style=" display: none;">
+            <div class="form-group col-md-6">
+              <label for='nombre_producto'>¿Tiene Dieta?</label>
+              <div class='col-md-8 margin_top'>
+                <div class="form-check">
+                <input  onclick="desbloquearDieta(event)" class="form-check-input" type="radio" name="exampleRadios" id="radioNoDieta" value="NO" checked>
+                <label class="form-check-label" for="radioNoDieta">
+                    No
+                </label>
+                
+                </div>
+                <div class="form-check">
+                <input onclick="desbloquearDieta(event)" class="form-check-input" type="radio" name="exampleRadios" id="radioDieta" value="SI">
+                <label class="form-check-label" for="radioDieta">
+                    Si
+                </label>
+                </div>
+            </div>
+            </div>
+            <!--<div class="form-group col-md-6">
+                <label for="listStatus">¿Indique Dieta?</label>
+                <input type="text" class="form-control" id="dieta"  disabled name="dieta">
+            </div>-->
+         </div>
+
+  
+              <div class="tile-footer">
+                <button id="btnActionForm" class="btn btn-primary" type="submit"><i class="fa fa-fw fa-lg fa-check-circle"></i><span id="btnText">Guardar</span></button>&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-danger cerrarModal" type="button" data-dismiss="modal"><i class="fa fa-fw fa-lg fa-times-circle"></i>Cerrar</button>
+              </div>
+            </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+
+    
